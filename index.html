@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Odysi Studio – Unlock Your Next Stage of Growth</title>
+  <meta name="description" content="Align your growth, product, and AI strategies with Odysi Studio.">
+  <link href="https://fonts.googleapis.com/css?family=Inter:700,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <h1 class="logo">ODYSI STUDIO</h1>
+      <nav class="nav">
+        <a href="#services">Services</a>
+        <a href="#team">Team</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <div class="container">
+    <main>
+      <section class="hero">
+        <div class="hero-cube">
+          <img id="rotating-image" width="220" height="220" alt="Rotating hero image" style="display:block; margin:auto;" />
+        </div>
+      </section>
+      <div class="content">
+        <section class="services" id="services">
+          <div class="service-block">
+            <div class="service-title">Growth & Customer Acquisition</div>
+            <div class="service-desc">Growth experiments, CAC/LTV tracking, scalable acquisition.</div>
+          </div>
+          <div class="service-block">
+            <div class="service-title">GTM & Market Expansion</div>
+            <div class="service-desc">Launch new markets, localized GTM strategy, fast iteration loops.</div>
+          </div>
+          <div class="service-block">
+            <div class="service-title">Product & Product Operations</div>
+            <div class="service-desc">Vision, roadmap, scalable processes, ship faster.</div>
+          </div>
+          <div class="service-block">
+            <div class="service-title">AI Strategy & Automation</div>
+            <div class="service-desc">Identify use cases, prototype AI tools, automate smartly.</div>
+          </div>
+        </section>
+        <hr class="section-divider">
+        <section class="team-section" id="team">
+          <div class="team-title">Built by Operators, Not Just Consultants.</div>
+          <div class="team-grid">
+            <div class="team-member">
+              <img src="images/mike.png" alt="Mike Tucci" class="team-photo">
+              <div class="team-name">Mike Tucci</div>
+              <div class="team-bio">Former Amazon and Shopify product leader. Deep experience in global expansion, product strategy, and AI implementation.</div>
+            </div>
+            <div class="team-member">
+              <img src="images/thomas.png" alt="Thomas Trincado" class="team-photo">
+              <div class="team-name">Thomas Trincado</div>
+              <div class="team-bio">Founder and strategy expert. Led teams, raised capital, and worked with startups from early traction to 8-figure revenue.</div>
+            </div>
+            <div class="team-member">
+              <img src="images/enric.png" alt="Enric Gallofré" class="team-photo">
+              <div class="team-name">Enric Gallofré</div>
+              <div class="team-bio">Entrepreneur and healthcare strategist. Founder of Purplecare, pioneer in operational excellence and service design.</div>
+            </div>
+          </div>
+        </section>
+        <section class="exp-section">
+          <div class="exp-grid">
+            <div class="exp-card">Helped startups close multi-million euro rounds</div>
+            <div class="exp-card">Built GTM strategies in US, Spain, France, UK, Germany</div>
+            <div class="exp-card">Scaled B2B and B2C growth systems across Europe</div>
+          </div>
+        </section>
+        <section class="contact-section" id="contact">
+          <div class="contact-title">Let's Turn Traction Into a System for Scale.</div>
+          <a href="https://www.notion.so/Odysi-Strategic-growth-fundraising-for-post-seed-startups-1df1ef2b3faa80dabbabe0935968ab2a?pvs=21" class="contact-btn">Schedule a Free Call</a>
+          <div>
+            <a href="mailto:odysi.studio@gmail.com" class="contact-link">or email us: odysi.studio@gmail.com</a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = [
+        "images/mobius.png",
+        "images/origami2.png",
+        "images/compass3.png"
+      ];
+      let idx = 0;
+      const imgEl = document.getElementById('rotating-image');
+      imgEl.src = images[0];
+
+      function showNextImage() {
+        idx = (idx + 1) % images.length;
+        imgEl.src = images[idx];
+      }
+      setInterval(showNextImage, 2500);
+
+      function revealOnScroll() {
+        document.querySelectorAll('.service-block').forEach((card, i) => {
+          const rect = card.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 60) {
+            card.style.transitionDelay = (i * 0.15) + "s";
+            card.classList.add('visible');
+          } else {
+            card.classList.remove('visible');
+            card.style.transitionDelay = "0s";
+          }
+        });
+      }
+
+      // --- Scroll-jacking for Team Section ---
+      let scrollLocked = false;
+      let scrollPosition = 0;
+      let teamRevealIndex = 0;
+      let wheelHandler = null;
+      let justUnlocked = false;
+      let hasRevealedTeam = false;
+
+      function lockScroll() {
+        if (scrollLocked) return;
+        scrollLocked = true;
+        // Instead of locking body, trap scroll position at the bottom of the team section
+        const teamSection = document.querySelector('.team-section');
+        if (teamSection) {
+          const sectionBottom = teamSection.getBoundingClientRect().bottom + window.scrollY;
+          scrollPosition = sectionBottom - window.innerHeight;
+          window.scrollTo(0, scrollPosition);
+        } else {
+          scrollPosition = window.scrollY;
+        }
+        // Add wheel event handler
+        wheelHandler = function(e) {
+          e.preventDefault();
+          // Keep scroll position trapped
+          window.scrollTo(0, scrollPosition);
+          revealNextTeamMember();
+        };
+        window.addEventListener('wheel', wheelHandler, { passive: false });
+      }
+
+      function unlockScroll() {
+        if (!scrollLocked) return;
+        scrollLocked = false;
+        // No need to restore body styles or scroll position
+        if (wheelHandler) {
+          window.removeEventListener('wheel', wheelHandler, { passive: false });
+          wheelHandler = null;
+        }
+        justUnlocked = true;
+        hasRevealedTeam = true;
+        setTimeout(() => {
+          justUnlocked = false;
+        }, 800);
+      }
+
+      function revealNextTeamMember() {
+        const members = document.querySelectorAll('.team-member');
+        if (teamRevealIndex < members.length) {
+          members[teamRevealIndex].classList.add('visible');
+          teamRevealIndex++;
+        }
+        if (teamRevealIndex >= members.length) {
+          setTimeout(unlockScroll, 200); // unlock after last member
+        }
+      }
+
+      function resetTeamMembers() {
+        if (hasRevealedTeam) return;
+        document.querySelectorAll('.team-member').forEach(m => m.classList.remove('visible'));
+        teamRevealIndex = 0;
+      }
+
+      function revealTeamOnScroll() {
+        if (hasRevealedTeam) return;
+        const members = document.querySelectorAll('.team-member');
+        const teamSection = document.querySelector('.team-section');
+        if (!members.length || !teamSection) return;
+        const sectionRect = teamSection.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        // Only lock when the bottom of the team section reaches the bottom of the viewport
+        if (
+          sectionRect.bottom <= windowHeight &&
+          !scrollLocked &&
+          teamRevealIndex < members.length &&
+          !justUnlocked
+        ) {
+          lockScroll();
+        }
+        // If user scrolls back up above the team section, reset (only if not revealed)
+        if (sectionRect.top > windowHeight) {
+          resetTeamMembers();
+          unlockScroll();
+        }
+      }
+
+      window.addEventListener('scroll', () => { revealOnScroll(); revealTeamOnScroll(); });
+      window.addEventListener('resize', () => { revealOnScroll(); revealTeamOnScroll(); });
+      revealOnScroll();
+      revealTeamOnScroll();
+    });
+  </script>
+</body>
+</html>
